@@ -15,16 +15,7 @@ vector<int> getOutput(int number, vector<int>& color, vector<int>& size)
 {
   vector<int> output(number);
   
-  for(int i = 0; i < number; i++)
-  {
-    for(int j = 0; j < number; j++)
-    {
-      if (color[i] != color[j] && size[i] > size[j])
-      {
-        output[i] += size[j];
-      }
-    }
-  }
+
   
   return output;
 }
