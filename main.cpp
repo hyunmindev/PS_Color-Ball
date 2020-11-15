@@ -23,17 +23,13 @@ struct Ball
 
 bool compare_size(const Ball& first_ball, const Ball& secont_ball)
 {
-  if(first_ball.size > secont_ball.size)
-  {
-    return false;
-  }
-  else if (first_ball.size == secont_ball.size)
+  if (first_ball.size == secont_ball.size)
   {
     return first_ball.color < secont_ball.color;
   }
   else
   {
-    return false;
+    return first_ball.size < secont_ball.size;
   }
 }
 
@@ -50,7 +46,14 @@ vector<int> getOutput(int number, vector<int>& color_vec, vector<int>& size_vec)
   }
   
   sort(ball_vec.begin(), ball_vec.end(), compare_size);
-    
+//  for(auto ball : ball_vec)
+//  {
+//    cout << " -color : " << ball.color;
+//    cout << " -size : " << ball.size;
+//    cout << " -index : " << ball.index;
+//    cout << endl;
+//  }
+  
   int sum = 0;
   
   map<int, int> color_sum_map;
@@ -77,7 +80,7 @@ int main()
   
   vector<int> output = getOutput(number, color_vec, size_vec);
   for(int i = 0; i < number; i++)
-    cout << output[i] << "\n";
+    cout << output[i] << endl;
   
   return 0;
 }
