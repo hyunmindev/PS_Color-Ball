@@ -18,7 +18,6 @@ struct Ball
   int color;
   int size;
   int index;
-  int catchable_size;
 };
 
 bool compare_size(const Ball& first_ball, const Ball& secont_ball)
@@ -46,6 +45,7 @@ vector<int> getOutput(int number, vector<int>& color_vec, vector<int>& size_vec)
   }
   
   sort(ball_vec.begin(), ball_vec.end(), compare_size);
+  
 //  for(auto ball : ball_vec)
 //  {
 //    cout << " -color : " << ball.color;
@@ -55,15 +55,20 @@ vector<int> getOutput(int number, vector<int>& color_vec, vector<int>& size_vec)
 //  }
   
   int sum = 0;
-  
   map<int, int> color_sum_map;
-  for(auto& ball : ball_vec)
+  for(int i = 0; i < number; i++)
   {
-    output_vec[ball.index] += sum - color_sum_map[ball.color];
-    sum += ball.size;
-    color_sum_map[ball.color] += ball.size;
+    for(int j = i; j < number; j++)
+    {
+      if (ball_vec[i].size != ball_vec[j].size)
+      {
+        break;
+      }
+      sum += ball_vec[j].size;
+      color_sum_map[ball_vec[j].color] += ball_vec[j].size;
+    }
+    output_vec[ball_vec[i].index] = sum - color_sum_map[ball_vec[i].color];
   }
-  
   return output_vec;
 }
 
