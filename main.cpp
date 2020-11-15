@@ -39,18 +39,6 @@ bool compare_size(const Ball& first_ball, const Ball& secont_ball)
   }
 }
 
-bool compare_index(const Ball& first_ball, const Ball& secont_ball)
-{
-  if(first_ball.index > secont_ball.index)
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-}
-
 vector<int> getOutput(int number, vector<int>& color_vec, vector<int>& size_vec)
 {
   vector<int> output_vec(number);
@@ -65,22 +53,14 @@ vector<int> getOutput(int number, vector<int>& color_vec, vector<int>& size_vec)
   
   sort(ball_vec.begin(), ball_vec.end(), compare_size);
     
+  int sum = 0;
+  
   map<int, int> color_sum_map;
   for(auto& ball : ball_vec)
   {
+    output_vec[ball.index] += sum - color_sum_map[ball.color];
+    sum += ball.size;
     color_sum_map[ball.color] += ball.size;
-    for(const auto& [color, size] : color_sum_map)
-    {
-      if(color != ball.color)
-      {
-        ball.catchable_size += size;
-      }
-    }
-  }
-  
-  for(const auto& ball : ball_vec)
-  {
-    output_vec[ball.index] = ball.catchable_size;
   }
   
   return output_vec;
@@ -99,7 +79,7 @@ int main()
   
   vector<int> output = getOutput(number, color_vec, size_vec);
   for(int i = 0; i < number; i++)
-    cout << output[i] << endl;
+    cout << output[i] << "\n";
   
   return 0;
 }
