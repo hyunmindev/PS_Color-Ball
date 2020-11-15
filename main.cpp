@@ -7,44 +7,83 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 #include <algorithm>
 
 using namespace std;
 
 
-vector<pair<int, int>> makePairVector(int number, vector<int>& color, vector<int>& size)
+struct Ball
 {
-  vector<pair<int, int>> size_color_pair(number);
-  
-  for(int i = 0; i < number; i++)
+  int color;
+  int size;
+  int index;
+  int catchable_size;
+};
+
+struct SumByColor
+{
+  int color;
+  int sum;
+};
+
+bool compare_size(const Ball& first_ball, const Ball& secont_ball)
+{
+  if(first_ball.size > secont_ball.size)
   {
-    size_color_pair[i] = make_pair(size[i], color[i]);
+    return false;
   }
-  return size_color_pair;
+  else
+  {
+    return true;
+  }
 }
 
-vector<int> getOutput(int number, vector<int>& color, vector<int>& size)
+bool compare_index(const Ball& first_ball, const Ball& secont_ball)
 {
-  vector<pair<int, int>> size_color_pair = makePairVector(number, color, size);
-  
-  sort(size_color_pair.begin(), size_color_pair.end());
-  
-  vector<int> output(number);
+  if(first_ball.index > secont_ball.index)
+  {
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
+
+vector<int> getOutput(int number, vector<int>& color_vec, vector<int>& size_vec)
+{
+  vector<int> output_vec(number);
+
+  vector<Ball> ball_vec(number);
   for(int i = 0; i < number; i++)
   {
-    for (int j = 0; j < number; j++)
+    ball_vec[i].color = color_vec[i];
+    ball_vec[i].size = size_vec[i];
+    ball_vec[i].index = i;
+  }
+  
+  sort(ball_vec.begin(), ball_vec.end(), compare_size);
+    
+  map<int, int> color_sum_map;
+  for(auto& ball : ball_vec)
+  {
+    color_sum_map[ball.color] += ball.size;
+    for(const auto& [color, size] : color_sum_map)
     {
-      if (color[i] != size_color_pair[j].second && size[i] > size_color_pair[j].first)
+      if(color != ball.color)
       {
-        output[i] += size_color_pair[j].first;
-      }
-      if(size[i] <= size_color_pair[j].first)
-      {
-        break;
+        ball.catchable_size += size;
       }
     }
   }
-  return output;
+  
+  for(const auto& ball : ball_vec)
+  {
+    output_vec[ball.index] = ball.catchable_size;
+  }
+  
+  return output_vec;
 }
 
 int main()
@@ -52,13 +91,13 @@ int main()
   int number;
   cin >> number;
   
-  vector<int> color(number);
-  vector<int> size(number);
+  vector<int> color_vec(number);
+  vector<int> size_vec(number);
   
   for(int i = 0; i < number; i++)
-    cin >> color[i] >> size[i];
+    cin >> color_vec[i] >> size_vec[i];
   
-  vector<int> output = getOutput(number, color, size);
+  vector<int> output = getOutput(number, color_vec, size_vec);
   for(int i = 0; i < number; i++)
     cout << output[i] << endl;
   
