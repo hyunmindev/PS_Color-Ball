@@ -23,26 +23,27 @@ vector<pair<int, int>> makePairVector(int number, vector<int>& color, vector<int
   return size_color_pair;
 }
 
-
-
 vector<int> getOutput(int number, vector<int>& color, vector<int>& size)
 {
-  vector<int> output(number);
-  
   vector<pair<int, int>> size_color_pair = makePairVector(number, color, size);
   
   sort(size_color_pair.begin(), size_color_pair.end());
   
-  for(int i = 0 ; i < number; i++)
+  vector<int> output(number);
+  for(int i = 0; i < number; i++)
   {
-//    cout << size_color_pair[i].first << ", " << size_color_pair[i].second << endl;
-    for (int j = i + 1; j < number; j++)
+    for (int j = 0; j < number; j++)
     {
-
+      if (color[i] != size_color_pair[j].second && size[i] > size_color_pair[j].first)
+      {
+        output[i] += size_color_pair[j].first;
+      }
+      if(size[i] <= size_color_pair[j].first)
+      {
+        break;
+      }
     }
   }
-  
-  
   return output;
 }
 
