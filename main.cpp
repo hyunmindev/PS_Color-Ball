@@ -21,21 +21,19 @@ struct Ball
   int catchable_size;
 };
 
-struct SumByColor
-{
-  int color;
-  int sum;
-};
-
 bool compare_size(const Ball& first_ball, const Ball& secont_ball)
 {
   if(first_ball.size > secont_ball.size)
   {
     return false;
   }
+  else if (first_ball.size == secont_ball.size)
+  {
+    return first_ball.color < secont_ball.color;
+  }
   else
   {
-    return true;
+    return false;
   }
 }
 
