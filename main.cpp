@@ -22,20 +22,12 @@ struct Ball
 
 bool compare_size(const Ball& first_ball, const Ball& secont_ball)
 {
-  if (first_ball.size == secont_ball.size)
-  {
-    return first_ball.color < secont_ball.color;
-  }
-  else
-  {
-    return first_ball.size < secont_ball.size;
-  }
+  return first_ball.size < secont_ball.size;
 }
 
 vector<int> getOutput(int number, vector<int>& color_vec, vector<int>& size_vec)
 {
-  vector<int> output_vec(number);
-
+  /* Ball vector 선언 후 값 대입 */
   vector<Ball> ball_vec(number);
   for(int i = 0; i < number; i++)
   {
@@ -44,36 +36,35 @@ vector<int> getOutput(int number, vector<int>& color_vec, vector<int>& size_vec)
     ball_vec[i].index = i;
   }
   
+  /* 공을 size 오름차순으로 정렬 */
   sort(ball_vec.begin(), ball_vec.end(), compare_size);
   
-//  for(auto ball : ball_vec)
-//  {
-//    cout << " -color : " << ball.color;
-//    cout << " -size : " << ball.size;
-//    cout << " -index : " << ball.index;
-//    cout << endl;
-//  }
-  
+  /* prefix sum */
   int sum = 0;
+  int i = 0;
+  int j = 0;
   map<int, int> color_sum_map;
-  for(int i = 0; i < number; i++)
+  vector<int> output_vec(number);
+  while(i < number)
   {
-    for(int j = i; j < number; j++)
+    while(ball_vec[i].size > ball_vec[j].size)
     {
-      if (ball_vec[i].size != ball_vec[j].size)
-      {
-        break;
-      }
       sum += ball_vec[j].size;
       color_sum_map[ball_vec[j].color] += ball_vec[j].size;
+      j++;
     }
     output_vec[ball_vec[i].index] = sum - color_sum_map[ball_vec[i].color];
+    i++;
   }
+  
   return output_vec;
 }
 
 int main()
 {
+//  ios_base :: sync_with_stdio(false);
+//  cin.tie(NULL);
+//  cout.tie(NULL);
   int number;
   cin >> number;
   
@@ -81,11 +72,17 @@ int main()
   vector<int> size_vec(number);
   
   for(int i = 0; i < number; i++)
+  {
+//    scanf("%d %d", &color_vec[i], &size_vec[i]);
     cin >> color_vec[i] >> size_vec[i];
+  }
   
-  vector<int> output = getOutput(number, color_vec, size_vec);
+  vector<int> output_vec = getOutput(number, color_vec, size_vec);
   for(int i = 0; i < number; i++)
-    cout << output[i] << endl;
+  {
+//    printf("%d\n", output_vec[i]);
+    cout << output_vec[i] << "\n";
+  }
   
   return 0;
 }
